@@ -493,3 +493,52 @@
     align-items: center;
   }
 }
+
+.auth-container {
+  display: flex;
+  background-color:#181818;
+  color: #ffffff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.auth-container input {
+  background-color: #121212;
+  color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.auth-container button {
+  padding: 10px;
+  background-color: #1db954;;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.auth-container .error {
+  color: red;
+}
+
+.logout-button {
+  background-color: #1db954;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  background-color: #17a74b;
+}
