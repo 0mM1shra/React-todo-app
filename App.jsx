@@ -8,7 +8,9 @@ import {
   deleteDoc,
   doc,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { db, auth } from './firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import AuthForm from './AuthForm';
 
 const getRandomColor = () => {
   const colors = ['#fbbc04', '#34a853', '#4285f4', '#e91e63', '#9c27b0', '#00acc1'];
@@ -16,11 +18,19 @@ const getRandomColor = () => {
 };
 
 function App() {
+  const [user, setUser] = useState(undefined);
   const [tasks, setTasks] = useState([]);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const [time, setTime] = useState(new Date());
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,7 +41,8 @@ function App() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const snapshot = await getDocs(collection(db, 'tasks'));
+      if (!user) return;
+      const snapshot = await getDocs(collection(db, 'users', user.uid, 'tasks'));
       const fetchedTasks = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
@@ -39,9 +50,10 @@ function App() {
       setTasks(fetchedTasks);
     };
     fetchTasks();
-  }, []);
+  }, [user]);
 
   const addTask = async () => {
+    if (!user) return;
     const formattedDate = selectedDate.toLocaleDateString('en-GB');
     const newTask = {
       title: '',
@@ -51,23 +63,21 @@ function App() {
       color: getRandomColor(),
       date: formattedDate,
     };
-    const docRef = await addDoc(collection(db, 'tasks'), newTask);
+    const docRef = await addDoc(collection(db, 'users', user.uid, 'tasks'), newTask);
     setTasks([{ ...newTask, id: docRef.id }, ...tasks]);
   };
 
   const saveTask = async (id, title, description) => {
-    const taskRef = doc(db, 'tasks', id);
+    if (!user) return;
+    const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     await updateDoc(taskRef, { title, description, editing: false });
     setTasks(tasks.map(t => (t.id === id ? { ...t, title, description, editing: false } : t)));
   };
 
   const deleteTask = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'tasks', id));
-      setTasks(tasks.filter(task => task.id !== id));
-    } catch (error) {
-      console.error("Delete failed: ", error);
-    }
+    if (!user) return;
+    await deleteDoc(doc(db, 'users', user.uid, 'tasks', id));
+    setTasks(tasks.filter(task => task.id !== id));
   };
 
   const toggleEdit = (id) => {
@@ -75,8 +85,9 @@ function App() {
   };
 
   const toggleCompletion = async (id) => {
+    if (!user) return;
     const task = tasks.find(t => t.id === id);
-    const taskRef = doc(db, 'tasks', id);
+    const taskRef = doc(db, 'users', user.uid, 'tasks', id);
     await updateDoc(taskRef, { completed: !task.completed });
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
   };
@@ -138,6 +149,14 @@ function App() {
   const calendarDays = generateCalendar();
   const tasksForSelectedDate = tasks.filter(task => task.date === selectedDate.toLocaleDateString('en-GB'));
 
+  if (user === undefined) {
+    return <div style={{ color: 'black', padding: '2rem' }}>Loading user...</div>;
+  }
+
+  if (!user) {
+    return <AuthForm setUser={setUser} />;
+  }
+
   return (
     <div className="app-container">
       {sidebarOpen && (
@@ -175,6 +194,23 @@ function App() {
                 );
               })}
             </div>
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+              <button
+                className="logout-button"
+                onClick={() => signOut(auth)}
+                style={{
+                  backgroundColor: '#1db954',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                }}
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -201,11 +237,7 @@ function App() {
             </div>
 
             {tasksForSelectedDate.map((task) => (
-              <div
-                key={task.id}
-                className="sticky-note"
-                style={{ backgroundColor: task.color }}
-              >
+              <div key={task.id} className="sticky-note" style={{ backgroundColor: task.color }}>
                 <div className="checkbox">
                   <input
                     type="checkbox"
@@ -237,12 +269,7 @@ function App() {
                       }
                     />
                     <div className="actions bottom-right">
-                      <button
-                        className="save"
-                        onClick={() => saveTask(task.id, task.title, task.description)}
-                      >
-                        Save
-                      </button>
+                      <button className="save" onClick={() => saveTask(task.id, task.title, task.description)}>Save</button>
                     </div>
                     <div className="actions bottom-left">
                       <svg
@@ -261,24 +288,17 @@ function App() {
                 ) : (
                   <>
                     <p className="task-date">{task.date}</p>
-                    <h3 className={task.completed ? 'completed-text' : ''}>
-                      {task.title}
-                    </h3>
+                    <h3 className={task.completed ? 'completed-text' : ''}>{task.title}</h3>
                     <hr className="separator" />
                     <div className="description-wrapper">
-                      <p
-                        className={`description ${expandedDescriptions[task.id] ? 'expanded' : ''} ${task.completed ? 'completed-text' : ''}`}
-                      >
+                      <p className={`description ${expandedDescriptions[task.id] ? 'expanded' : ''} ${task.completed ? 'completed-text' : ''}`}>
                         {task.description}
                       </p>
                       {task.description.length > 100 && (
-                        <span
-                          className="toggle-desc"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleDescription(task.id);
-                          }}
-                        >
+                        <span className="toggle-desc" onClick={(e) => {
+                          e.stopPropagation();
+                          toggleDescription(task.id);
+                        }}>
                           {expandedDescriptions[task.id] ? 'See less' : '...more'}
                         </span>
                       )}
