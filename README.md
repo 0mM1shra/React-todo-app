@@ -1,19 +1,12 @@
-# React-todo-app
-React Task Manager with Firebase
-A modern, responsive task manager application built with React and Firebase Firestore.
+# React + Vite
 
-Features:
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Create, read, update, and delete (CRUD) tasks stored in Firebase Firestore.
+Currently, two official plugins are available:
 
-Tasks tied to selected calendar dates with intuitive date selection.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Real-time task completion toggling.
+## Expanding the ESLint configuration
 
-Expandable task descriptions.
-
-Responsive design optimized for both desktop and mobile devices.
-
-Live digital clock and dynamic date labels like "Today" and "Tomorrow".
-
-Colorful, draggable sticky note style task cards.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

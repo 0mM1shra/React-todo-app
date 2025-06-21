@@ -1,0 +1,495 @@
+/* General Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #121212;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+.main-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #1f1f1f;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  color: #1db954;
+  margin-bottom: 10px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.sidebar li.active {
+  font-weight: bold;
+  color: white;
+}
+
+/* Toggle Hamburger */
+.hamburger {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  margin-right: 16px;
+}
+
+/* Top Header */
+.top-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 30px;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 👈 This aligns 'Today' and date text to the left */
+  justify-content: center;
+}
+
+
+.top-header .aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgba(29, 185, 84, 0.3),
+    rgba(29, 185, 84, 0.05) 40px
+  );
+  mix-blend-mode: screen;
+  animation: auroraWaves 15s linear infinite;
+  opacity: 0.7;
+  z-index: 0;
+}
+
+@keyframes auroraWaves {
+  0% {
+    transform: translateX(0%) translateY(0%) rotate(0deg);
+  }
+  50% {
+    transform: translateX(-10%) translateY(-5%) rotate(180deg);
+  }
+  100% {
+    transform: translateX(0%) translateY(0%) rotate(360deg);
+  }
+}
+
+.top-header > * {
+  z-index: 1;
+}
+
+/* Header Text */
+.header-left h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  color: #1db954;
+}
+
+.date-text {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 4px;
+}
+
+/* Digital Clock */
+.digital-clock {
+  display: flex;
+  align-items: flex-end;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1db954;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(29, 185, 84, 0.4);
+}
+
+.clock-time {
+  line-height: 1;
+}
+
+.ampm {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+  bottom: 2px;
+}
+
+/* Sticky Notes Panel */
+.sticky-panel {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #181818;
+}
+
+.sticky-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.sticky-note {
+  position: relative;
+  width: 180px;
+  min-height: 200px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.sticky-note:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.sticky-note input,
+.sticky-note textarea {
+  width: 100%;
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-family: inherit;
+  font-weight: 500;
+  resize: none;
+}
+
+.sticky-note input:focus,
+.sticky-note textarea:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sticky-note input::placeholder,
+.sticky-note textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.separator {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 5px 0;
+}
+
+.description-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+.description {
+  max-height: 5.6em;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13px;
+  color: white;
+}
+
+.description.expanded {
+  max-height: 1000px;
+}
+
+.toggle-desc {
+  font-size: 12px;
+  color: #ccc;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+/* Icons */
+.actions.bottom-left {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon {
+  cursor: pointer;
+  color: white;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.icon:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.actions.bottom-right {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+}
+
+.actions.bottom-right .save {
+  background-color: #1db954;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.actions.bottom-right .save:hover {
+  background-color: #17a74b;
+}
+
+.completed-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Add Note */
+.add-new {
+  background-color: #282828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #1db954;
+  font-weight: bold;
+  border: 2px dashed #1db954;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 180px;
+  height: 200px;
+  border-radius: 10px;
+}
+
+.add-new:hover {
+  background-color: #1db954;
+  color: #121212;
+  transform: scale(1.05);
+}
+
+/* Checkbox */
+.checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #fff;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 9px;
+  border: solid #1db954;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.checkbox input[type="checkbox"]:checked::after {
+  opacity: 1;
+}
+
+/* Calendar */
+.calendar {
+  margin-top: 20px;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 5px;
+  font-size: 13px;
+  text-align: center;
+  color: #999;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-cell {
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.calendar-cell.empty {
+  background: transparent;
+}
+
+.calendar-cell.past {
+  color: #666;
+  opacity: 0.5;
+}
+
+.calendar-cell.future {
+  color: #ccc;
+}
+
+.calendar-cell.today {
+  border: 2px solid #1db954;
+  color: #1db954;
+  font-weight: bold;
+}
+
+.upcoming-heading {
+  width: 100%;
+  font-size: 20px;
+  color: #1db954;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.task-date {
+  font-size: 4px;
+  color: #ddd;
+  margin-top: -6px;
+  margin-bottom: 6px;
+}
+
+.calendar-cell.selected {
+  outline: 2px solid #1db954;
+  background-color: rgba(29, 185, 84, 0.2);
+  font-weight: bold;
+}
+
+.note-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.task-date {
+  font-size: 11px;
+  color: #ccc;
+  margin: 0 0 2px 0;
+  font-weight: 400;
+}
+
+/* For devices smaller than 768px (phones, small tablets) */
+@media (max-width: 767px) {
+  .app-container {
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    order: 2; /* Sidebar below main content */
+  }
+
+  .main-panel {
+    flex: none;
+    width: 100%;
+    order: 1; /* Main content above sidebar */
+    padding: 10px;
+  }
+
+  .sticky-notes {
+    justify-content: center; /* Center notes */
+  }
+
+  .sticky-note,
+  .add-new {
+    width: 90vw; /* Almost full width on phone */
+    min-height: 150px;
+  }
+
+  .top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 15px;
+  }
+
+  .digital-clock {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .hamburger {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .add-new {
+    width: 90vw !important;  /* Make it wide enough */
+    height: 150px !important; /* Adjust height if needed */
+    font-size: 50px !important; /* Make the plus bigger */
+    display: flex !important; /* Ensure it’s not hidden */
+    justify-content: center;
+    align-items: center;
+  }
+}
