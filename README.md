@@ -1,12 +1,32 @@
-# React + Vite
+# React Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, elegant Todo list application built with React and Firebase.  
+Manage tasks with create, read, update, and delete (CRUD) functionality.  
+Supports date-based task filtering, a calendar sidebar, and responsive design for desktop and mobile devices.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Add, edit, delete tasks with titles and descriptions  
+- Mark tasks as completed or incomplete  
+- Tasks are associated with specific dates via a built-in calendar  
+- Responsive UI optimized for desktop and phone screens  
+- Real-time clock and date display  
+- Tasks saved and synced with Firebase Firestore  
+- Color-coded sticky notes for tasks  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Demo
+
+[Link to live demo or screenshots if available]
+
+---
+
+## Installation
+
+1. Clone the repo  
+   ```bash
+   git clone https://github.com/0mM1shra/React-todo-app.git
+   cd React-todo-app
